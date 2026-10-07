@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NovaBank — Transacciones</title>
+<link rel="icon" href="img/logo-banco.png" />
+<link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+<div class="app-shell" id="app"></div>
+
+<template id="tpl-transacciones">
+  <section class="card card-pad">
+    <div class="fila entre gap-m" style="margin-bottom:18px;flex-wrap:wrap">
+      <div class="campo-caja" style="max-width:280px">
+        <span data-icon="search"></span>
+        <input id="buscar" type="text" placeholder="Buscar movimiento…" />
+      </div>
+      <div class="fila gap-s" id="filtros">
+        <button class="btn btn-sm btn-dorado" data-filtro="todos">Todos</button>
+        <button class="btn btn-sm btn-fantasma" data-filtro="credit">Ingresos</button>
+        <button class="btn btn-sm btn-fantasma" data-filtro="debit">Gastos</button>
+      </div>
+    </div>
+    <div id="lista-transacciones"></div>
+  </section>
+</template>
+
+<script src="js/ui.js"></script>
+<script src="js/api.js"></script>
+<script src="js/transacciones.js"></script>
+</body>
+</html>

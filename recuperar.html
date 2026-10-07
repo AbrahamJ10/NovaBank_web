@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NovaBank — Recuperar contraseña</title>
+<link rel="icon" href="img/logo-banco.png" />
+<link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+
+<div class="publica">
+  <section class="publica-arte">
+    <a href="index.html" class="marca">
+      <img src="img/logo-banco.png" alt="NovaBank" />
+      <span>Nova<b>Bank</b></span>
+    </a>
+    <p class="frase">Recupera el acceso a tu cuenta en <span>unos segundos</span>, sin complicaciones.</p>
+    <div class="pie">
+      <div><b>256-bit</b>cifrado end-to-end</div>
+      <div><b>24/7</b>soporte dedicado</div>
+      <div><b>100%</b>verificación biométrica</div>
+    </div>
+  </section>
+
+  <section class="publica-form">
+    <div class="caja">
+      <h1 class="titulo" id="paso-titulo">Recuperar contraseña</h1>
+      <p class="sub" id="paso-sub">Te enviaremos un código de verificación a tu correo.</p>
+
+      <form id="form-paso-1">
+        <div class="campo" style="margin-bottom:20px">
+          <label for="correo">Correo electrónico</label>
+          <div class="campo-caja"><span data-icon="mail"></span><input id="correo" type="email" placeholder="tucorreo@gmail.com" required /></div>
+          <span class="campo-error oculto" id="error-1"></span>
+        </div>
+        <button type="submit" class="btn btn-dorado btn-block" id="btn-paso-1">Enviar código</button>
+      </form>
+
+      <form id="form-paso-2" class="oculto">
+        <div class="otp-caja" id="otp-cajas"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <input id="otp-input" maxlength="6" inputmode="numeric" style="position:absolute;opacity:0;pointer-events:none" />
+
+        <div class="campo" style="margin:20px 0 16px">
+          <label for="clave-nueva">Nueva contraseña</label>
+          <div class="campo-caja">
+            <span data-icon="lock"></span>
+            <input id="clave-nueva" type="password" placeholder="Mín. 10 caracteres, 1 mayúscula, 1 número" required />
+          </div>
+        </div>
+        <span class="campo-error oculto" id="error-2" style="display:block;margin-bottom:14px"></span>
+        <button type="submit" class="btn btn-dorado btn-block" id="btn-paso-2">Restablecer contraseña</button>
+      </form>
+
+      <div id="paso-exito" class="oculto" style="text-align:center">
+        <div style="width:60px;height:60px;border-radius:50%;margin:10px auto 18px;display:flex;align-items:center;justify-content:center;background:var(--verde-bg);color:var(--verde)">
+          <span data-icon="check" data-size="28"></span>
+        </div>
+        <p style="color:var(--ink-mid);font-size:14px;margin-bottom:22px">Tu contraseña se actualizó correctamente.</p>
+        <a href="index.html" class="btn btn-dorado btn-block">Ir a iniciar sesión</a>
+      </div>
+
+      <p style="text-align:center;margin-top:26px;font-size:12.5px;color:var(--ink-faint)">
+        <a href="index.html" style="color:var(--gold-soft);font-weight:700">← Volver al inicio de sesión</a>
+      </p>
+    </div>
+  </section>
+</div>
+
+<script src="js/ui.js"></script>
+<script src="js/api.js"></script>
+<script src="js/recuperar.js"></script>
+</body>
+</html>

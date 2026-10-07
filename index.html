@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NovaBank — Iniciar sesión</title>
+<link rel="icon" href="img/logo-banco.png" />
+<link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+
+<div class="publica">
+  <section class="publica-arte">
+    <a href="index.html" class="marca">
+      <img src="img/logo-banco.png" alt="NovaBank" />
+      <span>Nova<b>Bank</b></span>
+    </a>
+    <p class="frase">Banca privada digital, pensada para quienes <span>exigen más</span> de su dinero.</p>
+    <div class="pie">
+      <div><b>256-bit</b>cifrado end-to-end</div>
+      <div><b>24/7</b>soporte dedicado</div>
+      <div><b>100%</b>verificación biométrica</div>
+    </div>
+  </section>
+
+  <section class="publica-form">
+    <div class="caja">
+      <h1 class="titulo">Bienvenido de vuelta</h1>
+      <p class="sub">Ingresa tus credenciales para ver tu cuenta.</p>
+
+      <form id="form-login" novalidate>
+        <div class="campo" style="margin-bottom:16px">
+          <label for="correo">Correo electrónico</label>
+          <div class="campo-caja">
+            <span data-icon="mail"></span>
+            <input id="correo" type="email" placeholder="tucorreo@gmail.com" autocomplete="username" required />
+          </div>
+          <span class="campo-error oculto" id="error-correo"></span>
+        </div>
+
+        <div class="campo" style="margin-bottom:10px">
+          <label for="contrasena">Contraseña</label>
+          <div class="campo-caja">
+            <span data-icon="lock"></span>
+            <input id="contrasena" type="password" placeholder="••••••••••" autocomplete="current-password" required />
+            <span class="campo-accion" id="toggle-pass" data-icon="eye"></span>
+          </div>
+          <span class="campo-error oculto" id="error-general"></span>
+        </div>
+
+        <div class="fila entre" style="margin:6px 0 24px">
+          <label class="fila gap-s" style="font-size:12.5px;color:var(--ink-faint);cursor:pointer">
+            <input type="checkbox" id="recordar" style="accent-color:var(--gold)" /> Recordarme
+          </label>
+          <a href="recuperar.html" style="font-size:12.5px;font-weight:700;color:var(--gold-soft)">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <button type="submit" class="btn btn-dorado btn-block" id="btn-entrar">
+          <span class="txt">Ingresar</span>
+        </button>
+      </form>
+
+      <p style="text-align:center;margin-top:26px;font-size:12.5px;color:var(--ink-faint)">
+        Acceso exclusivo para clientes NovaBank. Regístrate desde la app móvil.
+      </p>
+    </div>
+  </section>
+</div>
+
+<script src="js/ui.js"></script>
+<script src="js/api.js"></script>
+<script src="js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NovaBank — Perfil</title>
+<link rel="icon" href="img/logo-banco.png" />
+<link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+<div class="app-shell" id="app"></div>
+
+<template id="tpl-perfil">
+  <div class="grid-2">
+    <section>
+      <section class="card card-pad">
+        <div class="fila gap-m" style="margin-bottom:22px">
+          <div class="avatar" style="width:58px;height:58px;font-size:19px" id="perfil-avatar">—</div>
+          <div>
+            <div style="font-family:var(--f-heading);font-weight:800;font-size:17px" id="perfil-nombre">—</div>
+            <div style="font-size:12.5px;color:var(--ink-faint)" id="perfil-dni">—</div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:0">
+          <div class="fila entre" style="padding:14px 0;border-top:1px solid var(--line-soft)">
+            <div><div style="font-size:11.5px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.04em">Correo</div><div style="font-weight:600;margin-top:3px" id="perfil-correo">—</div></div>
+            <button class="btn btn-sm btn-fantasma" id="btn-editar-correo">Editar</button>
+          </div>
+          <div class="fila entre" style="padding:14px 0;border-top:1px solid var(--line-soft)">
+            <div><div style="font-size:11.5px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.04em">Teléfono</div><div style="font-weight:600;margin-top:3px" id="perfil-telefono">—</div></div>
+            <button class="btn btn-sm btn-fantasma" id="btn-editar-telefono">Editar</button>
+          </div>
+          <div class="fila entre" style="padding:14px 0;border-top:1px solid var(--line-soft)">
+            <div><div style="font-size:11.5px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.04em">Contraseña</div><div style="font-weight:600;margin-top:3px">••••••••••</div></div>
+            <button class="btn btn-sm btn-fantasma" id="btn-editar-clave">Cambiar</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card card-pad" style="margin-top:20px">
+        <div style="font-family:var(--f-heading);font-weight:700;font-size:14px;margin-bottom:16px">Alertas de seguridad</div>
+        <div style="display:flex;flex-direction:column;gap:16px" id="lista-alertas"></div>
+      </section>
+    </section>
+
+    <section class="card card-pad">
+      <div style="font-family:var(--f-heading);font-weight:700;font-size:14px;margin-bottom:16px">Límites de la tarjeta</div>
+      <div class="campo" style="margin-bottom:16px">
+        <label>Límite de compras en línea</label>
+        <div class="campo-caja"><span style="color:var(--gold-soft);font-weight:700">S/</span><input id="limite-online" type="number" min="0" /></div>
+      </div>
+      <div class="campo" style="margin-bottom:20px">
+        <label>Límite de retiro en cajero</label>
+        <div class="campo-caja"><span style="color:var(--gold-soft);font-weight:700">S/</span><input id="limite-atm" type="number" min="0" /></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:22px" id="lista-geo"></div>
+      <button class="btn btn-dorado btn-block" id="btn-guardar-limites">Guardar límites</button>
+
+      <div class="divisor" style="margin:26px 0"></div>
+      <button class="btn btn-peligro btn-block" id="btn-cerrar-sesion-2">Cerrar sesión en este dispositivo</button>
+    </section>
+  </div>
+</template>
+
+<!-- Modal genérico OTP de perfil -->
+<div class="modal-fondo oculto" id="modal-otp">
+  <div class="card modal" style="position:relative">
+    <span class="modal-cerrar" id="cerrar-otp" data-icon="x"></span>
+    <h2 style="font-size:18px;text-align:center" id="otp-titulo">Verifica tu identidad</h2>
+    <p style="color:var(--ink-faint);font-size:13px;margin-top:8px;text-align:center" id="otp-sub">Te enviamos un código a tu correo.</p>
+
+    <div id="otp-campo-extra" class="campo oculto" style="margin:18px 0"></div>
+
+    <div class="otp-caja" id="otp-cajas"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <input id="otp-input" maxlength="6" inputmode="numeric" style="position:absolute;opacity:0;pointer-events:none" />
+    <span class="campo-error oculto" id="otp-error" style="display:block;margin-bottom:10px;text-align:center"></span>
+    <button class="btn btn-dorado btn-block" id="btn-confirmar-otp">Confirmar</button>
+  </div>
+</div>
+
+<script src="js/ui.js"></script>
+<script src="js/api.js"></script>
+<script src="js/perfil.js"></script>
+</body>
+</html>

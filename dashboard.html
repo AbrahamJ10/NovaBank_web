@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NovaBank — Inicio</title>
+<link rel="icon" href="img/logo-banco.png" />
+<link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+<div class="app-shell" id="app"></div>
+
+<template id="tpl-dashboard">
+  <section class="card hero-saldo">
+    <div class="etiqueta">Saldo disponible</div>
+    <div class="monto"><small>S/</small> <span id="saldo-valor">0.00</span></div>
+    <div class="meta">
+      <div><span class="k">N.º de cuenta</span><span class="v" id="meta-cuenta">—</span></div>
+      <div><span class="k">CCI</span><span class="v" id="meta-cci">—</span></div>
+      <div><span class="k">Cliente desde</span><span class="v" id="meta-desde">—</span></div>
+    </div>
+  </section>
+
+  <div class="acciones-rapidas">
+    <a href="transferir.html" class="accion-rapida"><div class="ico" data-icon="send"></div><span>Transferir</span></a>
+    <a href="transacciones.html" class="accion-rapida"><div class="ico" data-icon="list"></div><span>Movimientos</span></a>
+    <a href="tarjeta.html" class="accion-rapida"><div class="ico" data-icon="card"></div><span>Mi tarjeta</span></a>
+    <a href="perfil.html" class="accion-rapida"><div class="ico" data-icon="user"></div><span>Perfil</span></a>
+  </div>
+
+  <div class="grid-2" style="margin-top:24px">
+    <section class="card card-pad">
+      <div class="seccion-titulo">
+        <h3>Últimos movimientos</h3>
+        <a href="transacciones.html">Ver todos →</a>
+      </div>
+      <div id="lista-transacciones"></div>
+    </section>
+
+    <section class="card card-pad">
+      <div class="seccion-titulo"><h3>Resumen de tarjeta</h3></div>
+      <div id="resumen-tarjeta"></div>
+    </section>
+  </div>
+</template>
+
+<script src="js/ui.js"></script>
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

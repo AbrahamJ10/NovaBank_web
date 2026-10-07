@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NovaBank — Transferir</title>
+<link rel="icon" href="img/logo-banco.png" />
+<link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+<div class="app-shell" id="app"></div>
+
+<template id="tpl-transferir">
+  <div class="grid-2">
+    <section class="card card-pad">
+      <div class="seccion-titulo"><h3>Elige un destinatario</h3></div>
+      <div id="lista-destinatarios" style="margin-bottom:10px"></div>
+      <button class="btn btn-linea btn-sm" id="btn-nuevo-destinatario">+ Agregar destinatario</button>
+
+      <div id="form-nuevo" class="oculto" style="margin-top:18px;display:flex;flex-direction:column;gap:14px">
+        <div class="divisor"></div>
+        <div class="campo">
+          <label>Nombre</label>
+          <div class="campo-caja"><span data-icon="user"></span><input id="nd-nombre" placeholder="Nombre completo" /></div>
+        </div>
+        <div class="campo">
+          <label>Banco</label>
+          <div class="campo-caja"><span data-icon="building"></span><input id="nd-banco" placeholder="Ej. BCP, Interbank…" /></div>
+        </div>
+        <div class="campo">
+          <label>N.º de cuenta</label>
+          <div class="campo-caja"><span data-icon="idCard"></span><input id="nd-cuenta" placeholder="Número de cuenta" /></div>
+        </div>
+        <button class="btn btn-dorado btn-sm" id="btn-guardar-destinatario">Guardar destinatario</button>
+      </div>
+    </section>
+
+    <section class="card card-pad">
+      <div class="seccion-titulo"><h3>Detalle de la transferencia</h3></div>
+      <div class="campo" style="margin-bottom:16px">
+        <label>Monto a transferir</label>
+        <div class="campo-caja">
+          <span style="color:var(--gold-soft);font-weight:700">S/</span>
+          <input id="monto" type="number" min="1" step="0.01" placeholder="0.00" />
+        </div>
+      </div>
+      <div class="campo" style="margin-bottom:22px">
+        <label>Concepto</label>
+        <div class="campo-caja"><span data-icon="list"></span><input id="concepto" placeholder="Ej. Pago de servicio" maxlength="80" /></div>
+      </div>
+      <div id="destinatario-elegido" class="card card-pad" style="margin-bottom:22px;display:none;background:rgba(201,162,39,.05);border-color:rgba(201,162,39,.2)"></div>
+      <button class="btn btn-dorado btn-block" id="btn-continuar">Continuar</button>
+    </section>
+  </div>
+</template>
+
+<!-- Modal OTP -->
+<div class="modal-fondo oculto" id="modal-otp">
+  <div class="card modal" style="position:relative;text-align:center">
+    <span class="modal-cerrar" id="cerrar-otp" data-icon="x"></span>
+    <div style="width:56px;height:56px;border-radius:16px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;background:rgba(201,162,39,.12);color:var(--gold-soft)">
+      <span data-icon="shield" data-size="26"></span>
+    </div>
+    <h2 style="font-size:19px">Confirma tu transferencia</h2>
+    <p style="color:var(--ink-faint);font-size:13px;margin-top:8px">Enviamos un código de 6 dígitos a tu correo registrado.</p>
+    <div class="otp-caja" id="otp-cajas">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <input id="otp-input" maxlength="6" inputmode="numeric" style="position:absolute;opacity:0;pointer-events:none" />
+    <span class="campo-error oculto" id="otp-error" style="display:block;margin-bottom:10px"></span>
+    <button class="btn btn-dorado btn-block" id="btn-confirmar-otp">Confirmar</button>
+    <button class="btn btn-fantasma btn-block" id="btn-reenviar-otp" style="margin-top:10px">Reenviar código</button>
+  </div>
+</div>
+
+<!-- Modal recibo -->
+<div class="modal-fondo oculto" id="modal-recibo">
+  <div class="card modal" style="position:relative;text-align:center">
+    <span class="modal-cerrar" id="cerrar-recibo" data-icon="x"></span>
+    <div style="width:64px;height:64px;border-radius:50%;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;background:var(--verde-bg);color:var(--verde)">
+      <span data-icon="check" data-size="30"></span>
+    </div>
+    <h2 style="font-size:21px">Transferencia exitosa</h2>
+    <p style="color:var(--ink-faint);font-size:13px;margin-top:6px">El dinero ya está en camino.</p>
+    <div class="card card-pad" style="margin-top:22px;text-align:left;background:rgba(255,255,255,.02)" id="detalle-recibo"></div>
+    <a href="dashboard.html" class="btn btn-dorado btn-block" style="margin-top:20px">Volver al inicio</a>
+  </div>
+</div>
+
+<script src="js/ui.js"></script>
+<script src="js/api.js"></script>
+<script src="js/transferir.js"></script>
+</body>
+</html>
