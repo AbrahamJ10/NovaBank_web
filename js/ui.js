@@ -32,6 +32,17 @@ const ICONOS = {
   building: '<path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-6h6v6"/><path d="M9 11h.01M12 11h.01M15 11h.01"/>',
   zap: '<path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/>',
   idCard: '<rect x="2.5" y="5" width="19" height="14" rx="2.5"/><circle cx="8.5" cy="12" r="2.2"/><path d="M5.8 16.3c.5-1.4 1.6-2.1 2.7-2.1s2.2.7 2.7 2.1"/><path d="M14.5 10h4M14.5 13h4"/>',
+  users: '<path d="M11 14a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/><path d="M3.5 20c1.3-3.6 4.2-5.5 7.5-5.5s6.2 1.9 7.5 5.5"/><path d="M16.5 7a3 3 0 1 1 2.2 5"/><path d="M19 14.3c1.8.7 3.2 2.2 4 4.4"/>',
+  activity: '<path d="M3 12h4l2.5-7L13 19l2.5-7H21"/>',
+  ban: '<circle cx="12" cy="12" r="8.5"/><path d="m6.3 6.3 11.4 11.4"/>',
+  trash: '<path d="M4 7h16"/><path d="M9 7V4.8c0-.4.4-.8.9-.8h4.2c.5 0 .9.4.9.8V7"/><path d="M6 7l1 12.2c0 .9.8 1.6 1.7 1.6h6.6c.9 0 1.7-.7 1.7-1.6L18 7"/><path d="M10 11v6M14 11v6"/>',
+  key: '<circle cx="8" cy="15" r="3.5"/><path d="M10.5 12.5 20 3"/><path d="M16.5 6.5 19 9"/><path d="M13.5 9.5 16 12"/>',
+  unlock: '<rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 7.5-2"/>',
+  edit: '<path d="M4 20h4L19.5 8.5a2 2 0 0 0 0-2.8l-1.2-1.2a2 2 0 0 0-2.8 0L4 16v4Z"/><path d="M13.5 6.5 17.5 10.5"/>',
+  external: '<path d="M18 13.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5.5"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/>',
+  restore: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v5.5h5.5"/><path d="M12 8v4.5l3 2"/>',
+  dots: '<circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/>',
+  filter: '<path d="M4 5h16"/><path d="M7 12h10"/><path d="M10 19h4"/>',
 };
 
 function icono(nombre, tam = 18) {
@@ -118,13 +129,13 @@ function redirigirSiYaHaySesion() {
   }
 }
 
-// ---------- Shell de la app (sidebar + topbar) ----------
+// ---------- Shell del panel (sidebar + topbar) ----------
 const NAV_ITEMS = [
-  { href: 'dashboard.html', icono: 'home', label: 'Inicio' },
-  { href: 'transacciones.html', icono: 'list', label: 'Transacciones' },
-  { href: 'transferir.html', icono: 'send', label: 'Transferir' },
-  { href: 'tarjeta.html', icono: 'card', label: 'Mi tarjeta' },
-  { href: 'perfil.html', icono: 'user', label: 'Perfil' },
+  { href: 'dashboard.html', icono: 'home', label: 'Panel' },
+  { href: 'usuarios.html', icono: 'users', label: 'Usuarios' },
+  { href: 'seguridad.html', icono: 'shield', label: 'Seguridad' },
+  { href: 'auditoria.html', icono: 'activity', label: 'Auditoría' },
+  { href: 'transacciones.html', icono: 'wallet', label: 'Transacciones' },
 ];
 
 function construirShell({ titulo, subtitulo }) {
@@ -141,6 +152,7 @@ function construirShell({ titulo, subtitulo }) {
         <img src="img/logo-banco.png" alt="NovaBank" />
         <span>Nova<b>Bank</b></span>
       </a>
+      <div class="insignia insignia-dorado" style="margin:0 10px 18px;align-self:flex-start">${icono('shield', 12)} Panel administrativo</div>
       <nav class="nav-lista">
         ${NAV_ITEMS.map(
           (it) => `
@@ -153,7 +165,7 @@ function construirShell({ titulo, subtitulo }) {
         <div class="user-mini">
           <div class="avatar">${esc(iniciales(usuario?.fullName))}</div>
           <div style="min-width:0">
-            <div class="nombre">${esc(usuario?.fullName || 'Cliente NovaBank')}</div>
+            <div class="nombre">${esc(usuario?.fullName || 'Administrador')}</div>
             <div class="correo">${esc(usuario?.email || '')}</div>
           </div>
         </div>
@@ -170,7 +182,7 @@ function construirShell({ titulo, subtitulo }) {
           </div>
         </div>
         <div class="fila gap-m">
-          <a href="transacciones.html" class="btn btn-icono btn-fantasma" title="Notificaciones">${icono('bell', 18)}</a>
+          <span class="insignia insignia-verde" id="estado-sistema"><span class="punto-vivo"></span> Sistema operativo</span>
         </div>
       </header>
       <main class="contenido" id="contenido"></main>
@@ -179,7 +191,6 @@ function construirShell({ titulo, subtitulo }) {
 
   document.getElementById('btn-salir').addEventListener('click', async () => {
     await authApi.cerrarSesion();
-    localStorage.removeItem('nb_user');
     window.location.href = 'index.html';
   });
 
@@ -193,6 +204,27 @@ function construirShell({ titulo, subtitulo }) {
     sidebar.classList.remove('abierto');
     overlay.classList.remove('visible');
   });
+}
+
+// ---------- Guardia de sesión admin ----------
+// Además de exigir un token, confirma con /api/auth/me que el rol siga
+// siendo ADMIN — si alguien pierde ese rol (o nunca lo tuvo) se le cierra
+// la sesión de inmediato en vez de dejarlo ver un panel que de todas
+// formas le devolverá 403 en cada llamada.
+async function exigirAdmin() {
+  exigirSesion();
+  try {
+    const usuario = await authApi.me();
+    if (usuario.role !== 'ADMIN') {
+      await authApi.cerrarSesion();
+      window.location.href = 'index.html?error=sin_permiso';
+      return;
+    }
+    localStorage.setItem('nb_user', JSON.stringify(usuario));
+  } catch (err) {
+    await authApi.cerrarSesion();
+    window.location.href = 'index.html';
+  }
 }
 
 function pintarIconos(raiz = document) {
@@ -284,4 +316,77 @@ function dibujarSparkline(canvas, valores, { color = '#C9A227', relleno = 'rgba(
   ctx.lineWidth = 1.5;
   ctx.stroke();
   ctx.globalAlpha = 1;
+}
+
+// ---------- Insignia de estado de cuenta ----------
+function badgeEstadoUsuario(u) {
+  if (u.deletedAt) return `<span class="insignia insignia-rojo">${icono('trash', 12)} Eliminada</span>`;
+  if (u.lockedUntil && new Date(u.lockedUntil) > new Date()) return `<span class="insignia insignia-ambar">${icono('lock', 12)} Bloqueada</span>`;
+  if (!u.isActive) return `<span class="insignia insignia-rojo">${icono('ban', 12)} Suspendida</span>`;
+  return `<span class="insignia insignia-verde">${icono('check', 12)} Activa</span>`;
+}
+
+const RESULTADO_LOGIN_LABEL = {
+  SUCCESS: { texto: 'Exitoso', clase: 'insignia-verde' },
+  INVALID_CREDENTIALS: { texto: 'Credenciales inválidas', clase: 'insignia-rojo' },
+  ACCOUNT_LOCKED: { texto: 'Cuenta bloqueada', clase: 'insignia-ambar' },
+  ACCOUNT_INACTIVE: { texto: 'Cuenta inactiva', clase: 'insignia-rojo' },
+};
+
+const CATEGORIA_AUDITORIA_LABEL = {
+  SESION: 'Sesión', NAVEGACION: 'Navegación', TRANSFERENCIA: 'Transferencia', PAGO_SERVICIO: 'Pago de servicio',
+  RETIRO: 'Retiro', TARJETA: 'Tarjeta', QR: 'QR', PERFIL: 'Perfil', SEGURIDAD: 'Seguridad',
+};
+
+const CATEGORIA_TRANSACCION_LABEL = {
+  COMPRAS: 'Compras', TRANSFERENCIAS: 'Transferencias', QR: 'QR', INGRESOS: 'Ingresos',
+  RETIROS: 'Retiros', SERVICIOS: 'Servicios', PAGO_TARJETA: 'Pago de tarjeta',
+};
+
+// ---------- Panel lateral deslizante ----------
+function abrirDrawer(contenidoHtml) {
+  let fondo = document.getElementById('drawer-fondo');
+  if (!fondo) {
+    fondo = document.createElement('div');
+    fondo.id = 'drawer-fondo';
+    fondo.className = 'drawer-fondo';
+    document.body.appendChild(fondo);
+    fondo.addEventListener('click', (e) => { if (e.target === fondo) cerrarDrawer(); });
+  }
+  fondo.innerHTML = `<aside class="drawer">${contenidoHtml}</aside>`;
+  pintarIconos(fondo);
+  requestAnimationFrame(() => fondo.classList.add('abierto'));
+  fondo.querySelectorAll('[data-cerrar-drawer]').forEach((el) => el.addEventListener('click', cerrarDrawer));
+  return fondo;
+}
+function cerrarDrawer() {
+  document.getElementById('drawer-fondo')?.classList.remove('abierto');
+}
+
+// ---------- Paginación ----------
+function renderPaginacion(total, pagina, limite, alCambiar) {
+  const totalPaginas = Math.max(1, Math.ceil(total / limite));
+  const desde = total === 0 ? 0 : (pagina - 1) * limite + 1;
+  const hasta = Math.min(total, pagina * limite);
+
+  const cont = document.createElement('div');
+  cont.className = 'paginacion';
+  cont.innerHTML = `
+    <span class="resumen">Mostrando ${desde}–${hasta} de ${total}</span>
+    <div class="controles">
+      <button class="btn btn-sm btn-fantasma" id="pg-prev" ${pagina <= 1 ? 'disabled' : ''}>← Anterior</button>
+      <button class="btn btn-sm btn-fantasma" id="pg-next" ${pagina >= totalPaginas ? 'disabled' : ''}>Siguiente →</button>
+    </div>`;
+  cont.querySelector('#pg-prev').addEventListener('click', () => alCambiar(pagina - 1));
+  cont.querySelector('#pg-next').addEventListener('click', () => alCambiar(pagina + 1));
+  return cont;
+}
+
+// ---------- Debounce (barras de búsqueda) ----------
+function conDebounce(fn, espera = 350) {
+  let temporizador;
+  return (...args) => {
+    clearTimeout(temporizador);
+    temporizador = setTimeout(() => fn(...args), espera);
+  };
 }

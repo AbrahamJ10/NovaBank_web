@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NovaBank Admin — Auditoría</title>
+<meta name="theme-color" content="#080F17" />
+<link rel="icon" href="img/logo-banco.png" />
+<link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+<div class="app-shell" id="app"></div>
+
+<template id="tpl-auditoria">
+  <section class="card card-pad reveal reveal-1">
+    <div class="filtros-barra">
+      <div class="campo-caja" style="max-width:300px;flex:1">
+        <span data-icon="search"></span>
+        <input id="buscar" type="text" placeholder="Buscar por usuario o acción…" />
+      </div>
+      <select class="select-filtro" id="filtro-categoria">
+        <option value="">Todas las categorías</option>
+        <option value="SESION">Sesión</option>
+        <option value="NAVEGACION">Navegación</option>
+        <option value="TRANSFERENCIA">Transferencia</option>
+        <option value="PAGO_SERVICIO">Pago de servicio</option>
+        <option value="RETIRO">Retiro</option>
+        <option value="TARJETA">Tarjeta</option>
+        <option value="QR">QR</option>
+        <option value="PERFIL">Perfil</option>
+        <option value="SEGURIDAD">Seguridad</option>
+      </select>
+    </div>
+
+    <div class="tabla-envoltorio">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Acción</th>
+            <th>Categoría</th>
+            <th>Ubicación</th>
+            <th>Resultado</th>
+            <th>Fecha y hora</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-auditoria"></tbody>
+      </table>
+    </div>
+    <div id="paginacion-host"></div>
+  </section>
+</template>
+
+<script src="js/ui.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auditoria.js"></script>
+</body>
+</html>

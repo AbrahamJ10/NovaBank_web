@@ -1,5 +1,5 @@
 // ============================================================
-// NovaBank — cliente de API (igual contrato que usa la app móvil)
+// NovaBank — cliente de API del panel de administración
 // ============================================================
 
 const API_URL = 'https://novabank-api-o6dx.onrender.com';
@@ -14,6 +14,7 @@ const ALMACEN = {
   limpiar() {
     localStorage.removeItem('nb_access');
     localStorage.removeItem('nb_refresh');
+    localStorage.removeItem('nb_user');
   },
 };
 
@@ -32,7 +33,7 @@ async function rawRequest(path, options = {}) {
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      'X-Platform': 'web',
+      'X-Platform': 'web-admin',
       'X-App-Version': '1.0.0',
       ...(options.headers || {}),
     },
@@ -90,7 +91,13 @@ async function authedRequest(path, options = {}) {
   }
 }
 
-// ---------- Auth ----------
+function construirQuery(params) {
+  const limpio = Object.fromEntries(Object.entries(params || {}).filter(([, v]) => v !== undefined && v !== null && v !== ''));
+  const qs = new URLSearchParams(limpio).toString();
+  return qs ? `?${qs}` : '';
+}
+
+// ---------- Auth (acceso del propio administrador) ----------
 const authApi = {
   async iniciarSesion(email, password) {
     const data = await rawRequest('/api/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) });
@@ -115,77 +122,47 @@ const authApi = {
   },
 };
 
-// ---------- Cuenta ----------
-const accountApi = {
-  async get() { return authedRequest('/api/account'); },
-  async setCardBlocked(blocked) { return authedRequest('/api/account/card-block', { method: 'POST', body: JSON.stringify({ blocked }) }); },
-  async pagarTarjeta(amount) { return authedRequest('/api/account/pay-card', { method: 'POST', body: JSON.stringify({ amount }) }); },
-  async revelarCvv(otpCode) { return authedRequest('/api/account/reveal-cvv', { method: 'POST', body: JSON.stringify({ otpCode }) }); },
-};
-
-// ---------- Transacciones ----------
-const transactionsApi = {
-  async list(limit = 50) {
-    const data = await authedRequest(`/api/transactions?limit=${limit}`);
-    return data.items;
+// ---------- Administración ----------
+const adminApi = {
+  async stats() {
+    return authedRequest('/api/admin/stats');
   },
-};
 
-// ---------- Notificaciones ----------
-const notificationsApi = {
-  async list(limit = 50) {
-    const data = await authedRequest(`/api/notifications?limit=${limit}`);
-    return data.items;
+  async listarUsuarios({ busqueda, estado, pagina = 1, limite = 20 } = {}) {
+    return authedRequest(`/api/admin/users${construirQuery({ busqueda, estado, pagina, limite })}`);
   },
-  async markAllRead() { await authedRequest('/api/notifications/read-all', { method: 'POST' }); },
-  async markRead(id) { await authedRequest(`/api/notifications/${id}/read`, { method: 'POST' }); },
-};
+  async detalleUsuario(id) {
+    return authedRequest(`/api/admin/users/${id}`);
+  },
+  async actualizarUsuario(id, datos) {
+    return authedRequest(`/api/admin/users/${id}`, { method: 'PATCH', body: JSON.stringify(datos) });
+  },
+  async suspenderUsuario(id) {
+    return authedRequest(`/api/admin/users/${id}/suspend`, { method: 'POST' });
+  },
+  async activarUsuario(id) {
+    return authedRequest(`/api/admin/users/${id}/activate`, { method: 'POST' });
+  },
+  async desbloquearUsuario(id) {
+    return authedRequest(`/api/admin/users/${id}/unlock`, { method: 'POST' });
+  },
+  async eliminarUsuario(id) {
+    return authedRequest(`/api/admin/users/${id}`, { method: 'DELETE' });
+  },
+  async restaurarUsuario(id) {
+    return authedRequest(`/api/admin/users/${id}/restore`, { method: 'POST' });
+  },
+  async restablecerContrasena(id) {
+    return authedRequest(`/api/admin/users/${id}/reset-password`, { method: 'POST' });
+  },
 
-// ---------- Destinatarios ----------
-const payeesApi = {
-  async list() {
-    const data = await authedRequest('/api/payees');
-    return data.items;
+  async eventosLogin({ resultado, correo, pagina = 1, limite = 20 } = {}) {
+    return authedRequest(`/api/admin/login-events${construirQuery({ resultado, correo, pagina, limite })}`);
   },
-  async create(input) { return authedRequest('/api/payees', { method: 'POST', body: JSON.stringify(input) }); },
-};
-
-// ---------- Transferencias ----------
-const transfersApi = {
-  async requestOtp() { await authedRequest('/api/transfers/otp/request', { method: 'POST' }); },
-  async execute(input) { return authedRequest('/api/transfers', { method: 'POST', body: JSON.stringify(input) }); },
-};
-
-// ---------- Perfil ----------
-const profileApi = {
-  async requestOtp() { await authedRequest('/api/profile/otp/request', { method: 'POST' }); },
-  async updateEmail(newEmail, otpCode) {
-    const data = await authedRequest('/api/profile/email', { method: 'POST', body: JSON.stringify({ newEmail, otpCode }) });
-    return data.user;
+  async auditoria({ categoria, busqueda, pagina = 1, limite = 20 } = {}) {
+    return authedRequest(`/api/admin/audit-logs${construirQuery({ categoria, busqueda, pagina, limite })}`);
   },
-  async updatePhone(newPhone, otpCode) {
-    const data = await authedRequest('/api/profile/phone', { method: 'POST', body: JSON.stringify({ newPhone, otpCode }) });
-    return data.user;
+  async transacciones({ pagina = 1, limite = 20 } = {}) {
+    return authedRequest(`/api/admin/transactions${construirQuery({ pagina, limite })}`);
   },
-  async updatePassword(currentPassword, newPassword, otpCode) {
-    await authedRequest('/api/profile/password', { method: 'POST', body: JSON.stringify({ currentPassword, newPassword, otpCode }) });
-  },
-};
-
-// ---------- Seguridad ----------
-const securityApi = {
-  async getAlerts() { return authedRequest('/api/security/alerts'); },
-  async updateAlerts(alertas) { return authedRequest('/api/security/alerts', { method: 'PUT', body: JSON.stringify(alertas) }); },
-  async getLimits() { return authedRequest('/api/security/limits'); },
-  async updateLimits(limits) { return authedRequest('/api/security/limits', { method: 'PUT', body: JSON.stringify(limits) }); },
-  async listSessions(refreshToken) {
-    const data = await authedRequest('/api/security/sessions', { method: 'POST', body: JSON.stringify({ refreshToken }) });
-    return data.items;
-  },
-  async revocarSesion(id) { await authedRequest(`/api/security/sessions/${id}`, { method: 'DELETE' }); },
-};
-
-// ---------- Estados de cuenta ----------
-const statementsApi = {
-  async send(month, year) { await authedRequest('/api/statements/send', { method: 'POST', body: JSON.stringify({ month, year }) }); },
 };

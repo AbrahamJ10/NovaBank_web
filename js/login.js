@@ -1,6 +1,10 @@
 redirigirSiYaHaySesion();
 pintarIconos();
 
+if (new URLSearchParams(window.location.search).get('error') === 'sin_permiso') {
+  document.getElementById('error-sin-permiso').style.display = 'block';
+}
+
 const form = document.getElementById('form-login');
 const btn = document.getElementById('btn-entrar');
 const errorGeneral = document.getElementById('error-general');
@@ -37,6 +41,11 @@ form.addEventListener('submit', async (e) => {
   ponerCargando(true);
   try {
     const usuario = await authApi.iniciarSesion(correo, contrasena);
+    if (usuario.role !== 'ADMIN') {
+      await authApi.cerrarSesion();
+      document.getElementById('error-sin-permiso').style.display = 'block';
+      return;
+    }
     localStorage.setItem('nb_user', JSON.stringify(usuario));
     window.location.href = 'dashboard.html';
   } catch (err) {

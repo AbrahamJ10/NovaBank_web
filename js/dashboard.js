@@ -1,74 +1,67 @@
-exigirSesion();
-construirShell({ titulo: 'Inicio', subtitulo: 'Resumen de tu cuenta' });
+exigirAdmin().then(() => {
+  construirShell({ titulo: 'Panel', subtitulo: 'Visión general de NovaBank' });
+  const contenido = document.getElementById('contenido');
+  contenido.appendChild(document.getElementById('tpl-dashboard').content.cloneNode(true));
+  pintarIconos();
+  cargar();
+});
 
-const contenido = document.getElementById('contenido');
-contenido.appendChild(document.getElementById('tpl-dashboard').content.cloneNode(true));
-pintarIconos();
-
-const CATEGORIA_ICONO = {
-  comida: 'wallet', compras: 'wallet', transporte: 'zap', servicios: 'building',
-  transferencia: 'send', salario: 'arrowDown', default: 'wallet',
-};
-
-function filaTransaccion(t) {
-  const esCredito = t.kind === 'credit';
+function filaEventoAuditoria(a) {
+  const ok = a.success;
   return `
-    <div class="transaccion">
-      <div class="ico" style="background:${esc(t.iconBg || 'rgba(201,162,39,.12)')};color:${esc(t.iconFg || '#E7CE92')}">
-        ${icono(esCredito ? 'arrowDown' : 'arrowUp', 18)}
+    <div class="evento-tl">
+      <span class="punto ${ok ? 'ok' : 'fallo'}"></span>
+      <div class="contenido-tl">
+        <div class="accion-tl">${esc(a.action.replace(/_/g, ' '))}</div>
+        <div class="meta-tl">${esc(a.userName || a.userEmail || 'Sistema')} · ${esc(CATEGORIA_AUDITORIA_LABEL[a.category] || a.category)} · ${formatoFechaHora(a.createdAt)}</div>
       </div>
-      <div class="info">
-        <div class="nombre">${esc(t.name)}</div>
-        <div class="meta">${esc(t.meta || formatoFecha(t.createdAt))}</div>
+    </div>`;
+}
+
+function filaLogin(e) {
+  const r = RESULTADO_LOGIN_LABEL[e.result] || { texto: e.result, clase: 'insignia-ambar' };
+  return `
+    <div class="fila-lista" style="padding:12px 4px">
+      <div class="avatar">${esc(iniciales(e.userName || e.email))}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-family:var(--f-heading);font-weight:700;font-size:13px">${esc(e.userName || e.email)}</div>
+        <div style="font-size:11.5px;color:var(--ink-faint);margin-top:1px">${esc(e.ip || 'IP desconocida')} · ${formatoFechaHora(e.createdAt)}</div>
       </div>
-      <div class="monto ${esCredito ? 'credito' : 'debito'}">${esCredito ? '+' : '-'} ${formatoDinero(Math.abs(t.amount))}</div>
+      <span class="insignia ${r.clase}">${r.texto}</span>
     </div>`;
 }
 
 async function cargar() {
-  const [cuenta, transacciones] = await Promise.all([
-    accountApi.get().catch(() => null),
-    transactionsApi.list(6).catch(() => []),
-  ]);
-
-  if (cuenta) {
-    contarNumero(document.getElementById('saldo-valor'), Number(cuenta.availableBalance));
-    document.getElementById('meta-cuenta').textContent = cuenta.accountNumber;
-    document.getElementById('meta-cci').textContent = cuenta.cci;
-    document.getElementById('meta-desde').textContent = formatoFecha(cuenta.memberSince);
-
-    document.getElementById('resumen-tarjeta').innerHTML = `
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <div class="fila entre"><span style="color:var(--ink-faint);font-size:13px">N.º de tarjeta</span><b>${esc(enmascararNumero(cuenta.cardNumber))}</b></div>
-        <div class="fila entre"><span style="color:var(--ink-faint);font-size:13px">Línea de crédito</span><b>${formatoDinero(cuenta.creditLine)}</b></div>
-        <div class="fila entre"><span style="color:var(--ink-faint);font-size:13px">Deuda actual</span><b style="color:var(--rojo)">${formatoDinero(cuenta.cardDebt)}</b></div>
-        <div class="fila entre"><span style="color:var(--ink-faint);font-size:13px">Pago mínimo</span><b>${formatoDinero(cuenta.minPayment)}</b></div>
-        <div class="divisor"></div>
-        <div class="fila entre">
-          <span style="color:var(--ink-faint);font-size:13px">Estado</span>
-          <span class="insignia ${cuenta.cardBlocked ? 'insignia-rojo' : 'insignia-verde'}">${cuenta.cardBlocked ? 'Bloqueada' : 'Activa'}</span>
-        </div>
-        <a href="tarjeta.html" class="btn btn-linea btn-sm btn-block">Administrar tarjeta</a>
-      </div>`;
-  } else {
-    document.getElementById('resumen-tarjeta').innerHTML = `<div class="vacio">${icono('card', 32)}<p>No se pudo cargar tu tarjeta.</p></div>`;
+  try {
+    const stats = await adminApi.stats();
+    contarNumero(document.getElementById('kpi-total'), stats.totalUsuarios, { decimales: 0 });
+    contarNumero(document.getElementById('kpi-activos'), stats.usuariosActivos, { decimales: 0 });
+    contarNumero(document.getElementById('kpi-suspendidos'), stats.usuariosSuspendidos, { decimales: 0 });
+    contarNumero(document.getElementById('kpi-bloqueados'), stats.cuentasBloqueadas, { decimales: 0 });
+    contarNumero(document.getElementById('kpi-nuevos'), stats.nuevosHoy, { decimales: 0 });
+    contarNumero(document.getElementById('kpi-logins'), stats.loginsHoy, { decimales: 0 });
+    contarNumero(document.getElementById('kpi-logins-fallidos'), stats.loginsFallidosHoy, { decimales: 0 });
+    contarNumero(document.getElementById('kpi-balance'), stats.balanceTotal, { prefijo: 'S/ ' });
+  } catch (err) {
+    toast(mensajeError(err), 'error');
   }
 
-  const lista = document.getElementById('lista-transacciones');
-  if (transacciones.length === 0) {
-    lista.innerHTML = `<div class="vacio">${icono('list', 32)}<p>Todavía no tienes movimientos.</p></div>`;
-  } else {
-    lista.innerHTML = transacciones.map(filaTransaccion).join('');
-  }
+  try {
+    const [auditoria, logins] = await Promise.all([
+      adminApi.auditoria({ limite: 8 }),
+      adminApi.eventosLogin({ limite: 6 }),
+    ]);
 
-  if (transacciones.length >= 2) {
-    const serie = [...transacciones].reverse().reduce((acc, t) => {
-      const previo = acc.length ? acc[acc.length - 1] : 0;
-      acc.push(previo + (t.kind === 'credit' ? t.amount : -t.amount));
-      return acc;
-    }, []);
-    dibujarSparkline(document.getElementById('grafica-actividad'), serie);
+    const tl = document.getElementById('actividad-reciente');
+    tl.innerHTML = auditoria.items.length
+      ? auditoria.items.map(filaEventoAuditoria).join('')
+      : `<div class="vacio">${icono('activity', 28)}<p>Sin actividad todavía.</p></div>`;
+
+    const lr = document.getElementById('logins-recientes');
+    lr.innerHTML = logins.items.length
+      ? logins.items.map(filaLogin).join('')
+      : `<div class="vacio">${icono('key', 28)}<p>Sin inicios de sesión todavía.</p></div>`;
+  } catch (err) {
+    toast(mensajeError(err), 'error');
   }
 }
-
-cargar().catch((err) => toast(mensajeError(err), 'error'));

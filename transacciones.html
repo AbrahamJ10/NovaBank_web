@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>NovaBank — Transacciones</title>
+<title>NovaBank Admin — Transacciones</title>
 <meta name="theme-color" content="#080F17" />
 <link rel="icon" href="img/logo-banco.png" />
 <link rel="stylesheet" href="css/estilos.css" />
@@ -13,18 +13,25 @@
 
 <template id="tpl-transacciones">
   <section class="card card-pad reveal reveal-1">
-    <div class="fila entre gap-m" style="margin-bottom:18px;flex-wrap:wrap">
-      <div class="campo-caja" style="max-width:280px">
-        <span data-icon="search"></span>
-        <input id="buscar" type="text" placeholder="Buscar movimiento…" />
-      </div>
-      <div class="fila gap-s" id="filtros">
-        <button class="btn btn-sm btn-dorado" data-filtro="todos">Todos</button>
-        <button class="btn btn-sm btn-fantasma" data-filtro="credit">Ingresos</button>
-        <button class="btn btn-sm btn-fantasma" data-filtro="debit">Gastos</button>
-      </div>
+    <div class="seccion-titulo">
+      <h3>Movimientos de todos los clientes</h3>
     </div>
-    <div id="lista-transacciones"></div>
+    <div class="tabla-envoltorio">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Movimiento</th>
+            <th>Categoría</th>
+            <th>Tipo</th>
+            <th>Monto</th>
+            <th>Fecha y hora</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-transacciones"></tbody>
+      </table>
+    </div>
+    <div id="paginacion-host"></div>
   </section>
 </template>
 

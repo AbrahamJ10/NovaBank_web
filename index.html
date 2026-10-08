@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>NovaBank — Iniciar sesión</title>
-<meta name="description" content="Banca privada digital NovaBank. Accede a tu cuenta de forma segura." />
+<title>NovaBank Admin — Iniciar sesión</title>
+<meta name="description" content="Panel interno de administración NovaBank." />
 <meta name="theme-color" content="#080F17" />
 <link rel="icon" href="img/logo-banco.png" />
 <link rel="stylesheet" href="css/estilos.css" />
@@ -23,18 +23,22 @@
       <img src="img/logo-banco.png" alt="NovaBank" />
       <span>Nova<b>Bank</b></span>
     </a>
-    <p class="frase">Banca privada digital, pensada para quienes <span>exigen más</span> de su dinero.</p>
+    <p class="frase">Control total sobre cuentas, seguridad y <span>auditoría</span> de NovaBank.</p>
     <div class="pie">
-      <div><b>256-bit</b>cifrado end-to-end</div>
-      <div><b>24/7</b>soporte dedicado</div>
-      <div><b>100%</b>verificación biométrica</div>
+      <div><b>100%</b>trazabilidad de acciones</div>
+      <div><b>24/7</b>monitoreo de sesiones</div>
+      <div><b>Real</b>time de fraude</div>
     </div>
   </section>
 
   <section class="publica-form">
     <div class="caja">
-      <h1 class="titulo">Bienvenido de vuelta</h1>
-      <p class="sub">Ingresa tus credenciales para ver tu cuenta.</p>
+      <span class="insignia insignia-dorado" style="margin-bottom:14px"><span data-icon="shield" data-size="12"></span> Acceso administrativo</span>
+      <h1 class="titulo">Panel de NovaBank</h1>
+      <p class="sub">Ingresa con tu cuenta de administrador.</p>
+      <div class="campo-error" id="error-sin-permiso" style="display:none;margin-bottom:18px;padding:12px 14px;background:rgba(255,140,122,.1);border-radius:10px;border:1px solid rgba(255,140,122,.25)">
+        Esa cuenta no tiene permisos de administrador.
+      </div>
 
       <form id="form-login" novalidate>
         <div class="campo" style="margin-bottom:16px">
@@ -69,7 +73,7 @@
       </form>
 
       <p style="text-align:center;margin-top:26px;font-size:12.5px;color:var(--ink-faint)">
-        Acceso exclusivo para clientes NovaBank. Regístrate desde la app móvil.
+        Acceso restringido a personal autorizado de NovaBank.
       </p>
     </div>
   </section>
