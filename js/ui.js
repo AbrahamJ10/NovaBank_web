@@ -43,6 +43,9 @@ const ICONOS = {
   restore: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v5.5h5.5"/><path d="M12 8v4.5l3 2"/>',
   dots: '<circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/>',
   filter: '<path d="M4 5h16"/><path d="M7 12h10"/><path d="M10 19h4"/>',
+  alertTriangle: '<path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 10v4"/><path d="M12 17h.01"/>',
+  clipboard: '<rect x="5" y="4.5" width="14" height="17" rx="2.3"/><path d="M9 4.5V3.8a1.3 1.3 0 0 1 1.3-1.3h3.4A1.3 1.3 0 0 1 15 3.8v.7"/><path d="M8.5 11h7M8.5 15h7M8.5 7h7"/>',
+  history: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v5.5h5.5"/><path d="M12 7v5l3.5 2"/>',
 };
 
 function icono(nombre, tam = 18) {
@@ -133,9 +136,11 @@ function redirigirSiYaHaySesion() {
 const NAV_ITEMS = [
   { href: 'dashboard.html', icono: 'home', label: 'Panel' },
   { href: 'usuarios.html', icono: 'users', label: 'Usuarios' },
-  { href: 'seguridad.html', icono: 'shield', label: 'Seguridad' },
+  { href: 'casos.html', icono: 'alertTriangle', label: 'Casos de seguridad' },
+  { href: 'seguridad.html', icono: 'shield', label: 'Accesos' },
   { href: 'auditoria.html', icono: 'activity', label: 'Auditoría' },
   { href: 'transacciones.html', icono: 'wallet', label: 'Transacciones' },
+  { href: 'acciones-admin.html', icono: 'history', label: 'Acciones de staff' },
 ];
 
 function construirShell({ titulo, subtitulo }) {
@@ -341,6 +346,20 @@ const CATEGORIA_AUDITORIA_LABEL = {
 const CATEGORIA_TRANSACCION_LABEL = {
   COMPRAS: 'Compras', TRANSFERENCIAS: 'Transferencias', QR: 'QR', INGRESOS: 'Ingresos',
   SERVICIOS: 'Servicios', PAGO_TARJETA: 'Pago de tarjeta',
+};
+
+const CATEGORIA_CASO_LABEL = {
+  FRAUDE: 'Fraude', CUENTA_COMPROMETIDA: 'Cuenta comprometida', ACTIVIDAD_SOSPECHOSA: 'Actividad sospechosa', OTRO: 'Otro',
+};
+const ESTADO_CASO_LABEL = {
+  ABIERTO: { texto: 'Abierto', clase: 'insignia-rojo' },
+  EN_REVISION: { texto: 'En revisión', clase: 'insignia-ambar' },
+  CERRADO: { texto: 'Cerrado', clase: 'insignia-verde' },
+};
+const PRIORIDAD_CASO_LABEL = {
+  BAJA: { texto: 'Baja', clase: 'insignia-azul' },
+  MEDIA: { texto: 'Media', clase: 'insignia-ambar' },
+  ALTA: { texto: 'Alta', clase: 'insignia-rojo' },
 };
 
 // ---------- Panel lateral deslizante ----------

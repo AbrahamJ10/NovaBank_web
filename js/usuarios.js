@@ -168,6 +168,58 @@ function pintarDetalle(d) {
       </div>
     </div>` : ''}
 
+    <div class="card card-pad" style="background:rgba(255,255,255,.02);margin-bottom:18px">
+      <div class="fila entre" style="margin-bottom:14px">
+        <span style="font-family:var(--f-heading);font-weight:700;font-size:13px">Notas internas</span>
+        <span style="font-size:11px;color:var(--ink-faint)">Solo visibles para el staff</span>
+      </div>
+      <div id="lista-notas" style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px">
+        ${d.notas.length ? d.notas.map((n) => `
+          <div class="fila" style="align-items:flex-start;gap:10px" data-nota-id="${esc(n.id)}">
+            <div style="flex:1;min-width:0;background:rgba(255,255,255,.03);border-radius:10px;padding:10px 12px">
+              <p style="font-size:12.5px;color:var(--ink);white-space:pre-wrap">${esc(n.contenido)}</p>
+              <div style="font-size:10.5px;color:var(--ink-faint);margin-top:6px">${esc(n.adminNombre)} · ${formatoFechaHora(n.createdAt)}</div>
+            </div>
+            <button class="tabla-accion-btn" data-borrar-nota="${esc(n.id)}" title="Eliminar nota">${icono('trash', 13)}</button>
+          </div>`).join('') : `<p style="font-size:12.5px;color:var(--ink-faint)">Sin notas todavía.</p>`}
+      </div>
+      <div class="campo-caja" style="align-items:flex-start;padding:10px 12px">
+        <textarea id="texto-nueva-nota" rows="2" placeholder="Escribe una nota interna…" style="flex:1;background:transparent;border:none;outline:none;color:var(--ink);font-family:var(--f-body);font-size:13px;resize:vertical"></textarea>
+      </div>
+      <button class="btn btn-linea btn-sm" id="btn-agregar-nota" style="margin-top:10px">${icono('clipboard', 14)} Agregar nota</button>
+    </div>
+
+    <div class="card card-pad" style="background:rgba(255,255,255,.02);margin-bottom:18px">
+      <div class="fila entre" style="margin-bottom:14px">
+        <span style="font-family:var(--f-heading);font-weight:700;font-size:13px">Casos de seguridad</span>
+        <button class="btn btn-fantasma btn-sm" id="btn-nuevo-caso" style="height:30px;padding:0 12px;font-size:11.5px">${icono('plus', 13)} Nuevo caso</button>
+      </div>
+      <div id="lista-casos" style="display:flex;flex-direction:column;gap:10px">
+        ${d.casos.length ? d.casos.map((c) => `
+          <div style="background:rgba(255,255,255,.03);border-radius:10px;padding:10px 12px">
+            <div class="fila entre" style="margin-bottom:6px">
+              <span class="insignia insignia-dorado">${esc(CATEGORIA_CASO_LABEL[c.categoria] || c.categoria)}</span>
+              <div class="fila gap-s">
+                <span class="insignia ${PRIORIDAD_CASO_LABEL[c.prioridad].clase}">${PRIORIDAD_CASO_LABEL[c.prioridad].texto}</span>
+                <span class="insignia ${ESTADO_CASO_LABEL[c.estado].clase}">${ESTADO_CASO_LABEL[c.estado].texto}</span>
+              </div>
+            </div>
+            <p style="font-size:12.5px;color:var(--ink)">${esc(c.descripcion)}</p>
+            ${c.resolucion ? `<p style="font-size:11.5px;color:var(--ink-faint);margin-top:6px"><b>Resolución:</b> ${esc(c.resolucion)}</p>` : ''}
+            <div style="font-size:10.5px;color:var(--ink-faint);margin-top:6px">${formatoFechaHora(c.createdAt)}${c.adminAsignadoNombre ? ' · Asignado a ' + esc(c.adminAsignadoNombre) : ''}</div>
+          </div>`).join('') : `<p style="font-size:12.5px;color:var(--ink-faint)">Sin casos abiertos.</p>`}
+      </div>
+    </div>
+
+    <div class="card card-pad" style="background:rgba(255,255,255,.02);margin-bottom:18px">
+      <div style="font-family:var(--f-heading);font-weight:700;font-size:13px;margin-bottom:14px">Historial de cambios</div>
+      ${d.historialCambios.length ? d.historialCambios.map((h) => `
+        <div class="fila entre" style="padding:8px 0;border-top:1px solid var(--line-soft);font-size:12px">
+          <span style="color:var(--ink-faint)">${esc(h.campo)}</span>
+          <span style="text-align:right"><b>${esc(h.valorAnterior || '—')}</b> → <b style="color:var(--gold-soft)">${esc(h.valorNuevo || '—')}</b><br><span style="font-size:10.5px;color:var(--ink-faint)">${esc(h.adminNombre || '')} · ${formatoFechaHora(h.createdAt)}</span></span>
+        </div>`).join('') : `<p style="font-size:12.5px;color:var(--ink-faint)">Sin cambios registrados.</p>`}
+    </div>
+
     <div style="margin-bottom:8px;font-family:var(--f-heading);font-weight:700;font-size:13px">Accesos recientes</div>
     <div class="linea-tiempo" style="margin-bottom:20px">
       ${d.eventosLogin.length ? d.eventosLogin.map((e) => `
@@ -203,6 +255,40 @@ function pintarDetalle(d) {
   `;
 
   pintarIconos(body);
+
+  // ---- notas internas ----
+  document.getElementById('btn-agregar-nota').addEventListener('click', async (e) => {
+    const btn = e.currentTarget;
+    const campo = document.getElementById('texto-nueva-nota');
+    const contenido = campo.value.trim();
+    if (!contenido) return;
+    btn.disabled = true;
+    try {
+      await adminApi.crearNota(u.id, contenido);
+      toast('Nota agregada.');
+      const fresco = await adminApi.detalleUsuario(u.id);
+      pintarDetalle(fresco);
+    } catch (err) {
+      toast(mensajeError(err), 'error');
+      btn.disabled = false;
+    }
+  });
+  document.getElementById('lista-notas').querySelectorAll('[data-borrar-nota]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('¿Eliminar esta nota?')) return;
+      try {
+        await adminApi.eliminarNota(btn.dataset.borrarNota);
+        toast('Nota eliminada.');
+        const fresco = await adminApi.detalleUsuario(u.id);
+        pintarDetalle(fresco);
+      } catch (err) {
+        toast(mensajeError(err), 'error');
+      }
+    });
+  });
+
+  // ---- casos de seguridad ----
+  document.getElementById('btn-nuevo-caso').addEventListener('click', () => abrirModalNuevoCaso(u.id));
 
   // ---- editar ----
   document.getElementById('btn-editar').addEventListener('click', () => {
@@ -303,5 +389,63 @@ function mostrarContrasenaTemporal(pass, correo) {
   fondo.addEventListener('click', (e) => { if (e.target === fondo) fondo.remove(); });
   fondo.querySelector('#copiar-pass-temp').addEventListener('click', () => {
     navigator.clipboard?.writeText(pass).then(() => toast('Contraseña copiada.'));
+  });
+}
+
+function abrirModalNuevoCaso(usuarioId) {
+  const fondo = document.createElement('div');
+  fondo.className = 'modal-fondo';
+  fondo.innerHTML = `
+    <div class="card modal" style="position:relative">
+      <span class="modal-cerrar" style="cursor:pointer" id="cerrar-nuevo-caso">${icono('x', 18)}</span>
+      <h2 style="font-size:18px;margin-bottom:18px">Abrir caso de seguridad</h2>
+      <form id="form-nuevo-caso" style="display:flex;flex-direction:column;gap:14px">
+        <div class="campo">
+          <label>Categoría</label>
+          <select class="select-filtro" id="caso-categoria" style="width:100%">
+            <option value="FRAUDE">Fraude</option>
+            <option value="CUENTA_COMPROMETIDA">Cuenta comprometida</option>
+            <option value="ACTIVIDAD_SOSPECHOSA">Actividad sospechosa</option>
+            <option value="OTRO">Otro</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label>Prioridad</label>
+          <select class="select-filtro" id="caso-prioridad" style="width:100%">
+            <option value="BAJA">Baja</option>
+            <option value="MEDIA" selected>Media</option>
+            <option value="ALTA">Alta</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label>Descripción</label>
+          <div class="campo-caja" style="align-items:flex-start;padding:10px 12px;height:auto">
+            <textarea id="caso-descripcion" rows="3" required style="flex:1;background:transparent;border:none;outline:none;color:var(--ink);font-family:var(--f-body);font-size:13.5px;resize:vertical"></textarea>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-dorado btn-block">Abrir caso</button>
+      </form>
+    </div>`;
+  document.body.appendChild(fondo);
+  pintarIconos(fondo);
+  fondo.querySelector('#cerrar-nuevo-caso').addEventListener('click', () => fondo.remove());
+  fondo.addEventListener('click', (e) => { if (e.target === fondo) fondo.remove(); });
+  fondo.querySelector('#form-nuevo-caso').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const descripcion = document.getElementById('caso-descripcion').value.trim();
+    if (!descripcion) return;
+    try {
+      await adminApi.crearCaso(usuarioId, {
+        categoria: document.getElementById('caso-categoria').value,
+        prioridad: document.getElementById('caso-prioridad').value,
+        descripcion,
+      });
+      toast('Caso de seguridad abierto.');
+      fondo.remove();
+      const fresco = await adminApi.detalleUsuario(usuarioId);
+      pintarDetalle(fresco);
+    } catch (err) {
+      toast(mensajeError(err), 'error');
+    }
   });
 }

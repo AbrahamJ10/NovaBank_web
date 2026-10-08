@@ -1,5 +1,5 @@
 exigirAdmin().then(() => {
-  construirShell({ titulo: 'Seguridad', subtitulo: 'Sesiones, accesos fallidos y bloqueos' });
+  construirShell({ titulo: 'Accesos', subtitulo: 'Sesiones, accesos fallidos y bloqueos' });
   const contenido = document.getElementById('contenido');
   contenido.appendChild(document.getElementById('tpl-seguridad').content.cloneNode(true));
   pintarIconos();

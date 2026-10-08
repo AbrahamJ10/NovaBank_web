@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NovaBank Admin — Acciones de staff</title>
+<meta name="theme-color" content="#080F17" />
+<link rel="icon" href="img/logo-banco.png" />
+<link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+<div class="app-shell" id="app"></div>
+
+<template id="tpl-acciones">
+  <section class="card card-pad reveal reveal-1">
+    <div class="seccion-titulo">
+      <h3>Qué hizo cada administrador</h3>
+    </div>
+    <div class="tabla-envoltorio">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>Administrador</th>
+            <th>Acción</th>
+            <th>Sobre</th>
+            <th>Detalle</th>
+            <th>Fecha y hora</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-acciones"></tbody>
+      </table>
+    </div>
+    <div id="paginacion-host"></div>
+  </section>
+</template>
+
+<script src="js/ui.js"></script>
+<script src="js/api.js"></script>
+<script src="js/acciones-admin.js"></script>
+</body>
+</html>

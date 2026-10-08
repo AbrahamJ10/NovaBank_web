@@ -165,4 +165,25 @@ const adminApi = {
   async transacciones({ tipo, categoria, busqueda, desde, hasta, pagina = 1, limite = 20 } = {}) {
     return authedRequest(`/api/admin/transactions${construirQuery({ tipo, categoria, busqueda, desde, hasta, pagina, limite })}`);
   },
+
+  async crearNota(usuarioId, contenido) {
+    return authedRequest(`/api/admin/users/${usuarioId}/notes`, { method: 'POST', body: JSON.stringify({ contenido }) });
+  },
+  async eliminarNota(notaId) {
+    await authedRequest(`/api/admin/notes/${notaId}`, { method: 'DELETE' });
+  },
+
+  async listarCasos({ estado, prioridad, busqueda, pagina = 1, limite = 20 } = {}) {
+    return authedRequest(`/api/admin/security-cases${construirQuery({ estado, prioridad, busqueda, pagina, limite })}`);
+  },
+  async crearCaso(usuarioId, datos) {
+    return authedRequest(`/api/admin/users/${usuarioId}/security-cases`, { method: 'POST', body: JSON.stringify(datos) });
+  },
+  async actualizarCaso(casoId, datos) {
+    return authedRequest(`/api/admin/security-cases/${casoId}`, { method: 'PATCH', body: JSON.stringify(datos) });
+  },
+
+  async accionesAdmin({ adminId, pagina = 1, limite = 25 } = {}) {
+    return authedRequest(`/api/admin/admin-actions${construirQuery({ adminId, pagina, limite })}`);
+  },
 };
