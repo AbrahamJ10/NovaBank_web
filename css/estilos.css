@@ -477,37 +477,32 @@ button { font-family: inherit; }
 
 /* Pieza central decorativa — llena el espacio vacío del panel con algo que
    refuerza de qué trata el panel (control/auditoría/seguridad) en vez de
-   dejarlo como texto flotando sobre un fondo vacío. */
-.arte-centro { position: relative; width: 300px; height: 230px; align-self: center; animation: entraArriba .8s var(--ease) .15s backwards; }
-.arte-anillo {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-  width: 156px; height: 156px; border-radius: 50%;
-  border: 1.5px dashed rgba(201,162,39,.4);
+   dejarlo como texto flotando sobre un fondo vacío. Deliberadamente sin
+   position:absolute — todo fluye con flexbox normal, para que no dependa
+   de calcular a mano dónde cae cada pieza. */
+.arte-centro { display: flex; flex-direction: column; align-items: center; gap: 28px; animation: entraArriba .8s var(--ease) .15s backwards; }
+
+.arte-anillo-int {
+  width: 92px; height: 92px; border-radius: 50%; flex: none;
+  background: radial-gradient(circle at 35% 30%, rgba(201,162,39,.28), rgba(14,44,78,.5));
+  border: 1.5px dashed rgba(201,162,39,.45);
+  box-shadow: 0 0 40px rgba(201,162,39,.14), inset 0 0 24px rgba(0,0,0,.25);
   display: flex; align-items: center; justify-content: center;
   animation: girarLento 26s linear infinite;
 }
-.arte-anillo-int {
-  width: 114px; height: 114px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, rgba(201,162,39,.28), rgba(14,44,78,.5));
-  border: 1px solid rgba(255,255,255,.14);
-  box-shadow: 0 0 40px rgba(201,162,39,.12), inset 0 0 24px rgba(0,0,0,.25);
-  display: flex; align-items: center; justify-content: center;
-  animation: girarLento 26s linear infinite reverse;
-}
-.arte-nucleo { color: var(--gold-soft); width: 36px; height: 36px; }
+.arte-nucleo { color: var(--gold-soft); width: 34px; height: 34px; animation: girarLento 26s linear infinite reverse; }
 @keyframes girarLento { to { transform: rotate(360deg); } }
 
+.arte-chips-fila { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 .arte-chip {
-  position: absolute; display: flex; align-items: center; gap: 9px; max-width: 160px;
+  display: flex; align-items: center; gap: 9px; max-width: 150px;
   background: rgba(17,30,43,.78); backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,.1); border-radius: 14px;
-  padding: 9px 13px; box-shadow: 0 12px 28px rgba(2,8,16,.45);
-  animation: flotarChip 5s ease-in-out infinite;
+  padding: 10px 13px; box-shadow: 0 12px 28px rgba(2,8,16,.4);
 }
 .arte-chip span { color: var(--gold-soft); flex: none; }
 .arte-chip b { display: block; font-family: var(--f-heading); font-weight: 700; font-size: 11.5px; color: #fff; white-space: nowrap; }
 .arte-chip small { display: block; font-size: 9.5px; color: rgba(255,255,255,.5); margin-top: 1px; white-space: nowrap; }
-@keyframes flotarChip { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
 
 @media (max-height: 760px) {
   .arte-centro { display: none; }
