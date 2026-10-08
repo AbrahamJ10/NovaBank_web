@@ -25,6 +25,30 @@
         <option value="bloqueados">Bloqueados por intentos</option>
         <option value="eliminados">Eliminados</option>
       </select>
+      <button class="btn btn-fantasma btn-sm btn-filtros-avanzados" id="btn-toggle-avanzados">
+        Filtros avanzados <span data-icon="chevron" data-size="13" style="transform:rotate(90deg)"></span>
+        <span class="cuenta-activos oculto" id="cuenta-filtros-activos">0</span>
+      </button>
+    </div>
+
+    <div class="filtros-avanzados" id="filtros-avanzados">
+      <div class="campo">
+        <label>Registrado desde</label>
+        <div class="campo-caja"><input id="filtro-desde" type="date" /></div>
+      </div>
+      <div class="campo">
+        <label>Registrado hasta</label>
+        <div class="campo-caja"><input id="filtro-hasta" type="date" /></div>
+      </div>
+      <div class="campo">
+        <label>Saldo mínimo</label>
+        <div class="campo-caja"><span style="color:var(--gold-soft);font-weight:700">S/</span><input id="filtro-saldo-min" type="number" min="0" step="0.01" placeholder="0.00" /></div>
+      </div>
+      <div class="campo">
+        <label>Saldo máximo</label>
+        <div class="campo-caja"><span style="color:var(--gold-soft);font-weight:700">S/</span><input id="filtro-saldo-max" type="number" min="0" step="0.01" placeholder="0.00" /></div>
+      </div>
+      <button class="btn btn-fantasma btn-sm" id="btn-limpiar-filtros" style="height:44px">Limpiar filtros</button>
     </div>
 
     <div class="tabla-envoltorio">

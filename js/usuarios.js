@@ -6,7 +6,7 @@ exigirAdmin().then(() => {
   inicializar();
 });
 
-let ESTADO = { busqueda: '', estado: '', pagina: 1, limite: 15 };
+let ESTADO = { busqueda: '', estado: '', desde: '', hasta: '', saldoMin: '', saldoMax: '', pagina: 1, limite: 15 };
 
 function filaUsuario(u) {
   return `
@@ -63,6 +63,41 @@ function inicializar() {
     ESTADO.pagina = 1;
     cargarTabla();
   });
+
+  const btnToggle = document.getElementById('btn-toggle-avanzados');
+  const panel = document.getElementById('filtros-avanzados');
+  btnToggle.addEventListener('click', () => {
+    panel.classList.toggle('abierto');
+    btnToggle.classList.toggle('abierto');
+  });
+
+  const aplicarAvanzado = conDebounce(() => {
+    ESTADO.desde = document.getElementById('filtro-desde').value;
+    ESTADO.hasta = document.getElementById('filtro-hasta').value;
+    ESTADO.saldoMin = document.getElementById('filtro-saldo-min').value;
+    ESTADO.saldoMax = document.getElementById('filtro-saldo-max').value;
+    ESTADO.pagina = 1;
+    actualizarContadorFiltros();
+    cargarTabla();
+  }, 350);
+
+  ['filtro-desde', 'filtro-hasta'].forEach((id) => document.getElementById(id).addEventListener('change', aplicarAvanzado));
+  ['filtro-saldo-min', 'filtro-saldo-max'].forEach((id) => document.getElementById(id).addEventListener('input', aplicarAvanzado));
+
+  document.getElementById('btn-limpiar-filtros').addEventListener('click', () => {
+    ['filtro-desde', 'filtro-hasta', 'filtro-saldo-min', 'filtro-saldo-max'].forEach((id) => { document.getElementById(id).value = ''; });
+    ESTADO.desde = ESTADO.hasta = ESTADO.saldoMin = ESTADO.saldoMax = '';
+    ESTADO.pagina = 1;
+    actualizarContadorFiltros();
+    cargarTabla();
+  });
+}
+
+function actualizarContadorFiltros() {
+  const n = ['desde', 'hasta', 'saldoMin', 'saldoMax'].filter((k) => ESTADO[k]).length;
+  const chip = document.getElementById('cuenta-filtros-activos');
+  chip.textContent = n;
+  chip.classList.toggle('oculto', n === 0);
 }
 
 // ============================================================

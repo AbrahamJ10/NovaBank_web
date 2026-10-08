@@ -128,8 +128,8 @@ const adminApi = {
     return authedRequest('/api/admin/stats');
   },
 
-  async listarUsuarios({ busqueda, estado, pagina = 1, limite = 20 } = {}) {
-    return authedRequest(`/api/admin/users${construirQuery({ busqueda, estado, pagina, limite })}`);
+  async listarUsuarios({ busqueda, estado, desde, hasta, saldoMin, saldoMax, pagina = 1, limite = 20 } = {}) {
+    return authedRequest(`/api/admin/users${construirQuery({ busqueda, estado, desde, hasta, saldoMin, saldoMax, pagina, limite })}`);
   },
   async detalleUsuario(id) {
     return authedRequest(`/api/admin/users/${id}`);
