@@ -205,3 +205,83 @@ function pintarIconos(raiz = document) {
 function marcadorCarga(alto = 54) {
   return `<div class="skeleton" style="height:${alto}px;border-radius:14px"></div>`;
 }
+
+// ---------- Conteo animado de números ----------
+// Detalle de pulido: el saldo no aparece de golpe, sube desde 0 con una
+// curva de desaceleración — el tipo de micro-interacción que distingue un
+// panel bancario "terminado" de uno recién armado.
+function contarNumero(el, valorFinal, { decimales = 2, duracion = 900, prefijo = '' } = {}) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = prefijo + valorFinal.toLocaleString('es-PE', { minimumFractionDigits: decimales, maximumFractionDigits: decimales });
+    return;
+  }
+  const inicio = performance.now();
+  const facilitar = (t) => 1 - Math.pow(1 - t, 3);
+  function paso(ahora) {
+    const progreso = Math.min(1, (ahora - inicio) / duracion);
+    const valor = valorFinal * facilitar(progreso);
+    el.textContent = prefijo + valor.toLocaleString('es-PE', { minimumFractionDigits: decimales, maximumFractionDigits: decimales });
+    if (progreso < 1) requestAnimationFrame(paso);
+  }
+  requestAnimationFrame(paso);
+}
+
+// ---------- Mini-gráfica de actividad (sin librerías) ----------
+function dibujarSparkline(canvas, valores, { color = '#C9A227', relleno = 'rgba(201,162,39,.14)' } = {}) {
+  if (!canvas || valores.length < 2) return;
+  const dpr = window.devicePixelRatio || 1;
+  const ancho = canvas.clientWidth, alto = canvas.clientHeight;
+  canvas.width = ancho * dpr;
+  canvas.height = alto * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const max = Math.max(...valores), min = Math.min(...valores);
+  const rango = max - min || 1;
+  const pad = 6;
+  const puntos = valores.map((v, i) => ({
+    x: pad + (i / (valores.length - 1)) * (ancho - pad * 2),
+    y: pad + (1 - (v - min) / rango) * (alto - pad * 2),
+  }));
+
+  function curva(ctx, pts) {
+    ctx.moveTo(pts[0].x, pts[0].y);
+    for (let i = 0; i < pts.length - 1; i++) {
+      const xm = (pts[i].x + pts[i + 1].x) / 2;
+      const ym = (pts[i].y + pts[i + 1].y) / 2;
+      ctx.quadraticCurveTo(pts[i].x, pts[i].y, xm, ym);
+    }
+    ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
+  }
+
+  ctx.clearRect(0, 0, ancho, alto);
+
+  ctx.beginPath();
+  curva(ctx, puntos);
+  ctx.lineTo(puntos[puntos.length - 1].x, alto);
+  ctx.lineTo(puntos[0].x, alto);
+  ctx.closePath();
+  ctx.fillStyle = relleno;
+  ctx.fill();
+
+  ctx.beginPath();
+  curva(ctx, puntos);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.stroke();
+
+  const ultimo = puntos[puntos.length - 1];
+  ctx.beginPath();
+  ctx.arc(ultimo.x, ultimo.y, 3.5, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(ultimo.x, ultimo.y, 6, 0, Math.PI * 2);
+  ctx.strokeStyle = color;
+  ctx.globalAlpha = .35;
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+}

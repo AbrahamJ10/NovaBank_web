@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>NovaBank — Inicio</title>
+<meta name="theme-color" content="#080F17" />
 <link rel="icon" href="img/logo-banco.png" />
 <link rel="stylesheet" href="css/estilos.css" />
 </head>
@@ -11,9 +12,16 @@
 <div class="app-shell" id="app"></div>
 
 <template id="tpl-dashboard">
-  <section class="card hero-saldo">
-    <div class="etiqueta">Saldo disponible</div>
-    <div class="monto"><small>S/</small> <span id="saldo-valor">0.00</span></div>
+  <section class="card hero-saldo reveal reveal-1">
+    <div class="fila entre" style="align-items:flex-start">
+      <div>
+        <div class="etiqueta">Saldo disponible</div>
+        <div class="monto"><small>S/</small> <span id="saldo-valor">0.00</span></div>
+      </div>
+      <div style="width:120px;height:46px;position:relative;z-index:1">
+        <canvas id="grafica-actividad" style="width:100%;height:100%"></canvas>
+      </div>
+    </div>
     <div class="meta">
       <div><span class="k">N.º de cuenta</span><span class="v" id="meta-cuenta">—</span></div>
       <div><span class="k">CCI</span><span class="v" id="meta-cci">—</span></div>
@@ -21,7 +29,7 @@
     </div>
   </section>
 
-  <div class="acciones-rapidas">
+  <div class="acciones-rapidas reveal reveal-2">
     <a href="transferir.html" class="accion-rapida"><div class="ico" data-icon="send"></div><span>Transferir</span></a>
     <a href="transacciones.html" class="accion-rapida"><div class="ico" data-icon="list"></div><span>Movimientos</span></a>
     <a href="tarjeta.html" class="accion-rapida"><div class="ico" data-icon="card"></div><span>Mi tarjeta</span></a>
@@ -29,7 +37,7 @@
   </div>
 
   <div class="grid-2" style="margin-top:24px">
-    <section class="card card-pad">
+    <section class="card card-pad reveal reveal-3">
       <div class="seccion-titulo">
         <h3>Últimos movimientos</h3>
         <a href="transacciones.html">Ver todos →</a>
@@ -37,7 +45,7 @@
       <div id="lista-transacciones"></div>
     </section>
 
-    <section class="card card-pad">
+    <section class="card card-pad reveal reveal-4">
       <div class="seccion-titulo"><h3>Resumen de tarjeta</h3></div>
       <div id="resumen-tarjeta"></div>
     </section>

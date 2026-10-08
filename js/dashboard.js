@@ -32,7 +32,7 @@ async function cargar() {
   ]);
 
   if (cuenta) {
-    document.getElementById('saldo-valor').textContent = Number(cuenta.availableBalance).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    contarNumero(document.getElementById('saldo-valor'), Number(cuenta.availableBalance));
     document.getElementById('meta-cuenta').textContent = cuenta.accountNumber;
     document.getElementById('meta-cci').textContent = cuenta.cci;
     document.getElementById('meta-desde').textContent = formatoFecha(cuenta.memberSince);
@@ -59,6 +59,15 @@ async function cargar() {
     lista.innerHTML = `<div class="vacio">${icono('list', 32)}<p>Todavía no tienes movimientos.</p></div>`;
   } else {
     lista.innerHTML = transacciones.map(filaTransaccion).join('');
+  }
+
+  if (transacciones.length >= 2) {
+    const serie = [...transacciones].reverse().reduce((acc, t) => {
+      const previo = acc.length ? acc[acc.length - 1] : 0;
+      acc.push(previo + (t.kind === 'credit' ? t.amount : -t.amount));
+      return acc;
+    }, []);
+    dibujarSparkline(document.getElementById('grafica-actividad'), serie);
   }
 }
 

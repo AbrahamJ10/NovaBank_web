@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>NovaBank — Perfil</title>
+<meta name="theme-color" content="#080F17" />
 <link rel="icon" href="img/logo-banco.png" />
 <link rel="stylesheet" href="css/estilos.css" />
 </head>
@@ -13,7 +14,7 @@
 <template id="tpl-perfil">
   <div class="grid-2">
     <section>
-      <section class="card card-pad">
+      <section class="card card-pad reveal reveal-1">
         <div class="fila gap-m" style="margin-bottom:22px">
           <div class="avatar" style="width:58px;height:58px;font-size:19px" id="perfil-avatar">—</div>
           <div>
@@ -38,13 +39,13 @@
         </div>
       </section>
 
-      <section class="card card-pad" style="margin-top:20px">
+      <section class="card card-pad reveal reveal-2" style="margin-top:20px">
         <div style="font-family:var(--f-heading);font-weight:700;font-size:14px;margin-bottom:16px">Alertas de seguridad</div>
         <div style="display:flex;flex-direction:column;gap:16px" id="lista-alertas"></div>
       </section>
     </section>
 
-    <section class="card card-pad">
+    <section class="card card-pad reveal reveal-3">
       <div style="font-family:var(--f-heading);font-weight:700;font-size:14px;margin-bottom:16px">Límites de la tarjeta</div>
       <div class="campo" style="margin-bottom:16px">
         <label>Límite de compras en línea</label>

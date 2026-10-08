@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>NovaBank — Mi tarjeta</title>
+<meta name="theme-color" content="#080F17" />
 <link rel="icon" href="img/logo-banco.png" />
 <link rel="stylesheet" href="css/estilos.css" />
 </head>
@@ -12,7 +13,7 @@
 
 <template id="tpl-tarjeta">
   <div class="grid-2">
-    <section>
+    <section class="reveal reveal-1">
       <div class="tarjeta-visual" id="tarjeta-visual">
         <div class="fila entre">
           <img src="img/logo-banco.png" alt="" style="height:22px;filter:brightness(0) invert(1);opacity:.9" />
@@ -25,7 +26,7 @@
         </div>
       </div>
 
-      <section class="card card-pad" style="margin-top:20px">
+      <section class="card card-pad reveal reveal-2" style="margin-top:20px">
         <div class="fila entre" style="margin-bottom:4px">
           <div>
             <div style="font-family:var(--f-heading);font-weight:700;font-size:14px">Bloquear tarjeta</div>
@@ -38,13 +39,13 @@
         </div>
       </section>
 
-      <section class="card card-pad" style="margin-top:20px">
+      <section class="card card-pad reveal reveal-3" style="margin-top:20px">
         <div style="font-family:var(--f-heading);font-weight:700;font-size:14px;margin-bottom:14px">Ver CVV</div>
         <button class="btn btn-linea btn-block" id="btn-ver-cvv">Solicitar código de seguridad</button>
       </section>
     </section>
 
-    <section class="card card-pad">
+    <section class="card card-pad reveal reveal-2">
       <div class="seccion-titulo"><h3>Estado de cuenta</h3></div>
       <div id="resumen-cuenta" style="display:flex;flex-direction:column;gap:14px"></div>
       <div class="divisor" style="margin:20px 0"></div>
