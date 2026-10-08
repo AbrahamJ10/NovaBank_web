@@ -335,12 +335,12 @@ const RESULTADO_LOGIN_LABEL = {
 
 const CATEGORIA_AUDITORIA_LABEL = {
   SESION: 'Sesión', NAVEGACION: 'Navegación', TRANSFERENCIA: 'Transferencia', PAGO_SERVICIO: 'Pago de servicio',
-  RETIRO: 'Retiro', TARJETA: 'Tarjeta', QR: 'QR', PERFIL: 'Perfil', SEGURIDAD: 'Seguridad',
+  TARJETA: 'Tarjeta', QR: 'QR', PERFIL: 'Perfil', SEGURIDAD: 'Seguridad',
 };
 
 const CATEGORIA_TRANSACCION_LABEL = {
   COMPRAS: 'Compras', TRANSFERENCIAS: 'Transferencias', QR: 'QR', INGRESOS: 'Ingresos',
-  RETIROS: 'Retiros', SERVICIOS: 'Servicios', PAGO_TARJETA: 'Pago de tarjeta',
+  SERVICIOS: 'Servicios', PAGO_TARJETA: 'Pago de tarjeta',
 };
 
 // ---------- Panel lateral deslizante ----------
