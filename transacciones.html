@@ -13,6 +13,44 @@
 
 <template id="tpl-transacciones">
   <section class="card card-pad reveal reveal-1">
+    <div class="filtros-barra">
+      <div class="campo-caja" style="max-width:280px;flex:1">
+        <span data-icon="search"></span>
+        <input id="buscar" type="text" placeholder="Buscar por cliente…" />
+      </div>
+      <select class="select-filtro" id="filtro-tipo">
+        <option value="">Ingresos y egresos</option>
+        <option value="CREDIT">Solo ingresos</option>
+        <option value="DEBIT">Solo egresos</option>
+      </select>
+      <select class="select-filtro" id="filtro-categoria">
+        <option value="">Todas las categorías</option>
+        <option value="COMPRAS">Compras</option>
+        <option value="TRANSFERENCIAS">Transferencias</option>
+        <option value="QR">QR</option>
+        <option value="INGRESOS">Ingresos</option>
+        <option value="RETIROS">Retiros</option>
+        <option value="SERVICIOS">Servicios</option>
+        <option value="PAGO_TARJETA">Pago de tarjeta</option>
+      </select>
+      <button class="btn btn-fantasma btn-sm btn-filtros-avanzados" id="btn-toggle-avanzados">
+        Filtros avanzados <span data-icon="chevron" data-size="13" style="transform:rotate(90deg)"></span>
+        <span class="cuenta-activos oculto" id="cuenta-filtros-activos">0</span>
+      </button>
+    </div>
+
+    <div class="filtros-avanzados" id="filtros-avanzados">
+      <div class="campo">
+        <label>Desde</label>
+        <div class="campo-caja"><input id="filtro-desde" type="date" /></div>
+      </div>
+      <div class="campo">
+        <label>Hasta</label>
+        <div class="campo-caja"><input id="filtro-hasta" type="date" /></div>
+      </div>
+      <button class="btn btn-fantasma btn-sm" id="btn-limpiar-filtros" style="height:44px">Limpiar filtros</button>
+    </div>
+
     <div class="seccion-titulo">
       <h3>Movimientos de todos los clientes</h3>
     </div>

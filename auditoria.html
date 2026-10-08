@@ -30,6 +30,27 @@
         <option value="PERFIL">Perfil</option>
         <option value="SEGURIDAD">Seguridad</option>
       </select>
+      <button class="btn btn-fantasma btn-sm btn-filtros-avanzados" id="btn-toggle-avanzados">
+        Filtros avanzados <span data-icon="chevron" data-size="13" style="transform:rotate(90deg)"></span>
+        <span class="cuenta-activos oculto" id="cuenta-filtros-activos">0</span>
+      </button>
+    </div>
+
+    <div class="filtros-avanzados" id="filtros-avanzados">
+      <div class="campo">
+        <label>Desde</label>
+        <div class="campo-caja"><input id="filtro-desde" type="date" /></div>
+      </div>
+      <div class="campo">
+        <label>Hasta</label>
+        <div class="campo-caja"><input id="filtro-hasta" type="date" /></div>
+      </div>
+      <div class="campo">
+        <label>Dirección IP</label>
+        <div class="campo-caja"><span data-icon="activity"></span><input id="filtro-ip" type="text" placeholder="Ej. 10.28.103" /></div>
+      </div>
+      <label class="chk-campo"><input type="checkbox" id="filtro-solo-fallidos" /> Solo fallidos</label>
+      <button class="btn btn-fantasma btn-sm" id="btn-limpiar-filtros" style="height:44px">Limpiar filtros</button>
     </div>
 
     <div class="tabla-envoltorio">

@@ -578,6 +578,29 @@ button { font-family: inherit; }
 .select-filtro:hover { border-color: rgba(255,255,255,.22); }
 .select-filtro:focus { outline: none; border-color: var(--gold); }
 
+.btn-filtros-avanzados { display: inline-flex; align-items: center; gap: 7px; }
+.btn-filtros-avanzados svg { transition: transform .22s var(--ease); }
+.btn-filtros-avanzados.abierto svg { transform: rotate(180deg); }
+.btn-filtros-avanzados .cuenta-activos {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 17px; height: 17px; padding: 0 4px;
+  border-radius: var(--radio-pill); background: var(--gold); color: #241B04; font-size: 10.5px; font-weight: 800;
+}
+
+.filtros-avanzados {
+  display: none; flex-wrap: wrap; align-items: flex-end; gap: 14px;
+  width: 100%; margin-top: 14px; padding-top: 16px; border-top: 1px solid var(--line-soft);
+  animation: entraArriba .25s var(--ease);
+}
+.filtros-avanzados.abierto { display: flex; }
+.filtros-avanzados .campo { min-width: 150px; flex: 1; }
+.filtros-avanzados .campo-caja { height: 44px; }
+.filtros-avanzados input[type="date"] { color-scheme: dark; }
+.filtros-avanzados .chk-campo {
+  display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: var(--radio-md);
+  background: rgba(255,255,255,.035); border: 1.5px solid var(--line); font-size: 13px; color: var(--ink-mid); cursor: pointer; white-space: nowrap;
+}
+.filtros-avanzados .chk-campo input { accent-color: var(--gold); }
+
 /* ============================================================
    Tabla de datos
    ============================================================ */

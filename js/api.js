@@ -156,13 +156,13 @@ const adminApi = {
     return authedRequest(`/api/admin/users/${id}/reset-password`, { method: 'POST' });
   },
 
-  async eventosLogin({ resultado, correo, pagina = 1, limite = 20 } = {}) {
-    return authedRequest(`/api/admin/login-events${construirQuery({ resultado, correo, pagina, limite })}`);
+  async eventosLogin({ resultado, correo, ip, desde, hasta, pagina = 1, limite = 20 } = {}) {
+    return authedRequest(`/api/admin/login-events${construirQuery({ resultado, correo, ip, desde, hasta, pagina, limite })}`);
   },
-  async auditoria({ categoria, busqueda, pagina = 1, limite = 20 } = {}) {
-    return authedRequest(`/api/admin/audit-logs${construirQuery({ categoria, busqueda, pagina, limite })}`);
+  async auditoria({ categoria, busqueda, ip, desde, hasta, soloFallidos, pagina = 1, limite = 20 } = {}) {
+    return authedRequest(`/api/admin/audit-logs${construirQuery({ categoria, busqueda, ip, desde, hasta, soloFallidos: soloFallidos ? '1' : undefined, pagina, limite })}`);
   },
-  async transacciones({ pagina = 1, limite = 20 } = {}) {
-    return authedRequest(`/api/admin/transactions${construirQuery({ pagina, limite })}`);
+  async transacciones({ tipo, categoria, busqueda, desde, hasta, pagina = 1, limite = 20 } = {}) {
+    return authedRequest(`/api/admin/transactions${construirQuery({ tipo, categoria, busqueda, desde, hasta, pagina, limite })}`);
   },
 };

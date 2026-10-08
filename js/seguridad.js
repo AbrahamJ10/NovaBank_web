@@ -6,7 +6,7 @@ exigirAdmin().then(() => {
   inicializar();
 });
 
-let ESTADO = { correo: '', resultado: '', pagina: 1, limite: 20 };
+let ESTADO = { correo: '', resultado: '', ip: '', desde: '', hasta: '', pagina: 1, limite: 20 };
 
 function filaEvento(e) {
   const r = RESULTADO_LOGIN_LABEL[e.result] || { texto: e.result, clase: 'insignia-ambar' };
@@ -36,7 +36,7 @@ async function cargarTabla() {
     const r = await adminApi.eventosLogin(ESTADO);
     tbody.innerHTML = r.items.length
       ? r.items.map(filaEvento).join('')
-      : `<tr><td colspan="5"><div class="vacio">${icono('shield', 32)}<p>No se encontraron eventos.</p></div></td></tr>`;
+      : `<tr><td colspan="5"><div class="vacio">${icono('shield', 32)}<p>No se encontraron eventos con esos filtros.</p></div></td></tr>`;
 
     const host = document.getElementById('paginacion-host');
     host.innerHTML = '';
@@ -46,8 +46,16 @@ async function cargarTabla() {
   }
 }
 
+function actualizarContadorFiltros() {
+  const n = ['ip', 'desde', 'hasta'].filter((k) => ESTADO[k]).length;
+  const chip = document.getElementById('cuenta-filtros-activos');
+  chip.textContent = n;
+  chip.classList.toggle('oculto', n === 0);
+}
+
 function inicializar() {
   cargarTabla();
+
   document.getElementById('buscar').addEventListener('input', conDebounce((e) => {
     ESTADO.correo = e.target.value.trim();
     ESTADO.pagina = 1;
@@ -56,6 +64,36 @@ function inicializar() {
   document.getElementById('filtro-resultado').addEventListener('change', (e) => {
     ESTADO.resultado = e.target.value;
     ESTADO.pagina = 1;
+    cargarTabla();
+  });
+
+  const btnToggle = document.getElementById('btn-toggle-avanzados');
+  const panel = document.getElementById('filtros-avanzados');
+  btnToggle.addEventListener('click', () => {
+    panel.classList.toggle('abierto');
+    btnToggle.classList.toggle('abierto');
+  });
+
+  const aplicarAvanzado = conDebounce(() => {
+    ESTADO.ip = document.getElementById('filtro-ip').value.trim();
+    ESTADO.desde = document.getElementById('filtro-desde').value;
+    ESTADO.hasta = document.getElementById('filtro-hasta').value;
+    ESTADO.pagina = 1;
+    actualizarContadorFiltros();
+    cargarTabla();
+  }, 350);
+
+  document.getElementById('filtro-ip').addEventListener('input', aplicarAvanzado);
+  document.getElementById('filtro-desde').addEventListener('change', aplicarAvanzado);
+  document.getElementById('filtro-hasta').addEventListener('change', aplicarAvanzado);
+
+  document.getElementById('btn-limpiar-filtros').addEventListener('click', () => {
+    document.getElementById('filtro-ip').value = '';
+    document.getElementById('filtro-desde').value = '';
+    document.getElementById('filtro-hasta').value = '';
+    ESTADO.ip = ESTADO.desde = ESTADO.hasta = '';
+    ESTADO.pagina = 1;
+    actualizarContadorFiltros();
     cargarTabla();
   });
 }
