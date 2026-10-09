@@ -345,7 +345,7 @@ const CATEGORIA_AUDITORIA_LABEL = {
 
 const CATEGORIA_TRANSACCION_LABEL = {
   COMPRAS: 'Compras', TRANSFERENCIAS: 'Transferencias', QR: 'QR', INGRESOS: 'Ingresos',
-  SERVICIOS: 'Servicios', PAGO_TARJETA: 'Pago de tarjeta',
+  SERVICIOS: 'Servicios',
 };
 
 const CATEGORIA_CASO_LABEL = {

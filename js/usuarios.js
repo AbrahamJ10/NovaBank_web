@@ -163,7 +163,6 @@ function pintarDetalle(d) {
         <div class="fila entre"><span style="color:var(--ink-faint)">N.º de cuenta</span><b>${esc(d.cuenta.accountNumber)}</b></div>
         <div class="fila entre"><span style="color:var(--ink-faint)">Saldo disponible</span><b>${formatoDinero(d.cuenta.availableBalance)}</b></div>
         <div class="fila entre"><span style="color:var(--ink-faint)">Línea de crédito</span><b>${formatoDinero(d.cuenta.creditLine)}</b></div>
-        <div class="fila entre"><span style="color:var(--ink-faint)">Deuda de tarjeta</span><b style="color:var(--rojo)">${formatoDinero(d.cuenta.cardDebt)}</b></div>
         <div class="fila entre"><span style="color:var(--ink-faint)">Tarjeta</span><span class="insignia ${d.cuenta.cardBlocked ? 'insignia-rojo' : 'insignia-verde'}">${d.cuenta.cardBlocked ? 'Bloqueada' : 'Activa'}</span></div>
       </div>
     </div>` : ''}
